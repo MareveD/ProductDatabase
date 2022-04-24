@@ -5,19 +5,20 @@
 
         <h2>Register</h2>
 
-        <form action="/newuser/signup" method="post" class="p-2 m-2">
+        <form action="/login" method="get" class="p-2 m-2">
 
-            <input class="form-control m-2" type="text" id="name" name="name" placeholder="Name"
-                aria-label="default input example" required="required">
             <input class="form-control m-2" type="text" id="email" name="email" placeholder="Email Address"
                 aria-label="default input example" required="required">
             <input class="form-control m-2" type="password" id="password" name="password" placeholder="password"
                 aria-label="default input example" required="required">
-            <button class="btn btn-primary m-2" type="submit">Register</button>
+            <button class="btn btn-primary m-2" type="submit">Login</button>
         </form>
-        <div>
-            Back to <a href="#" class="fw-bold">Login</a>
-        </div>
+
+        <form action="/newuser/signup" method="get" class="p-2 m-2">
+         <p>or</p>
+        <button class="btn btn-primary m-2" type="submit">Signup</button>
+        </form>
+
     </div>
 </main>
 

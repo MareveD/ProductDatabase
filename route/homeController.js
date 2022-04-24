@@ -1,14 +1,9 @@
 const Product = require("../model/product");
-const {
-search
-} = require("./users");
+const User = require("../model/newuser");
+//const {search} = require("./users");
 
 exports.getIndex = (req, res) => {
     res.render("new");
-}
-
-exports.getSignup = (req, res) => {
-    res.render("signup");
 }
 
 exports.getSearch = (req, res) => {
@@ -25,6 +20,7 @@ exports.redirectIndex = (req, res) => {
     res.redirect("/");
 }
 
+//////////////////////////// PRODUCTS ////////////////////////////
 exports.allProducts = (req, res) => {
     Product.find({}).then(product => {
         res.render("index", {
@@ -122,4 +118,35 @@ exports.delete = (req, rep) => {
         req.flash("error_msg", "Failed to delete your product to the database. Please try again !")
         rep.redirect("/");
     });
+}
+
+//////////////////////////// USERS ////////////////////////////
+
+exports.getSignup = (req, res) => {
+    res.render("signup");
+}
+
+exports.getLogin = (req, res) => {
+    res.render("login");
+}
+
+exports.addSignup = (req, res) => {
+    name = req.body.name;
+    email = req.body.email;
+    password = req.body.password;
+    const newUser = new User({
+        name: name,
+        email: email,
+        password: password
+    });
+    newUser.save()
+        .then(response => {
+            req.flash("success_msg", " Account sucessfully created !");
+            res.redirect("/")
+        })
+        .catch(error => {
+            req.flash("error_msg", "Failed to create your account !");
+            res.redirect("/signup")
+            console.log(error)
+        });
 }
