@@ -25,7 +25,7 @@ router.delete("/delete/:id", homeController.delete);
 router.get("/newuser/signup", homeController.getSignup);
 router.post("/newuser/signup", homeController.addSignup);
 
-router.get("/login", homeController.getLogin);
+router.get("/newuser/login", homeController.getLogin);
 
 ////////////////////////////////////////////////////////
 
