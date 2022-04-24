@@ -1,124 +1,6 @@
-const Product = require("../model/product");
 const User = require("../model/newuser");
 //const {search} = require("./users");
-
-exports.getIndex = (req, res) => {
-    res.render("new");
-}
-
-exports.getSearch = (req, res) => {
-    res.render("search", {
-        product: undefined
-    });
-}
-
-exports.getIndexSlash = (req, res) => {
-    res.render("/");
-}
-
-exports.redirectIndex = (req, res) => {
-    res.redirect("/");
-}
-
-//////////////////////////// PRODUCTS ////////////////////////////
-exports.allProducts = (req, res) => {
-    Product.find({}).then(product => {
-        res.render("index", {
-            products: product
-        });
-    }).catch(error => {
-        console.log(error);
-    });
-}
-
-exports.saveProduct = (req, res) => {
-    console.log(req.body);
-    code = req.body.code;
-    description = req.body.description;
-    prix = req.body.prix;
-    const newProduct = new Product({
-        code: code,
-        description: description,
-        prix: prix
-    });
-    newProduct.save()
-        .then(response => {
-            req.flash("success_msg", "Product data added to database successfully !");
-            res.redirect("/")
-        })
-        .catch(error => {
-            req.flash("error_msg", "Failed to add your product to the database. Please try again !")
-            console.log(error)
-        });
-}
-
-exports.findOneProduct = (req, res) => {
-    const code = req.query.search;
-    Product.find({
-            code
-        })
-        .then((product) => {
-            if (product.length !== 0) {
-                res.render("search", {
-                    product
-                })
-            } else {
-                req.flash("error_msg", "Can't find any product matching your query. Please try again !")
-                res.redirect('/product/search');
-            }
-        }).catch(
-            error => {
-                req.flash("error_msg", "Can't find any product matching your query. Please try again !")
-                res.redirect('/product/search');
-                console.log(error);
-            }
-        );
-}
-
-exports.editProduct = (req, res) => {
-    const searchById = {
-        _id: req.params.id
-    };
-    Product.findById(searchById)
-        .then(product => {
-            res.render("edit", {
-                product: product
-            })
-        }).catch();
-}
-
-exports.update = (req, rep) => {
-    const searchQuery = {
-        _id: req.params.id
-    };
-    Product.updateOne(searchQuery, {
-            $set: {
-                code: req.body.code,
-                description: req.body.description,
-                prix: req.body.prix
-            }
-        }).then((product) => {
-            req.flash("success_msg", "Product data updated successfully !");
-            rep.redirect("/");
-        })
-        .catch(error => {
-            req.flash("error_msg", "Failed to update your product from the database. Please try again !")
-            rep.redirect("/");
-        });
-}
-
-exports.delete = (req, rep) => {
-    const searchQuery = {
-        _id: req.params.id
-    };
-    Product.deleteOne(searchQuery).then(() => {
-        req.flash("success_msg", "Product deleted successfully !");
-        rep.redirect("/");
-    }).catch(error => {
-        req.flash("error_msg", "Failed to delete your product to the database. Please try again !")
-        rep.redirect("/");
-    });
-}
+const passport = require("passport");
 
 //////////////////////////// USERS ////////////////////////////
 
@@ -150,3 +32,25 @@ exports.addSignup = (req, res) => {
             console.log(error)
         });
 }
+exports.postLogin = (req, res) => {
+    email = req.body.email;
+    password = req.body.password;
+    User.find({
+        email
+    })
+    .then(function (response) {
+        req.flash("success_msg", " You are logged in !");
+        res.redirect("/");
+    })
+    .catch(error => {
+        res.redirect("error");
+    });
+
+};
+
+/* authenticate : passport.authenticate("local",{
+    failureRedirect: "user/login",
+    failureFlash: "You cannot connect",
+    successRedirect:"/",
+    successFlash: "You are logged in."
+}) */

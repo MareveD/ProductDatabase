@@ -5,9 +5,12 @@ const dotenv = require("dotenv");
 const methodOverride = require("method-override");
 const path = require("path");
 const userRoutes = require("./route/users");
+const passport = require("passport");
 const expressSession = require("express-session");
 const cookieParser = require("cookie-parser");
 const connectFlash = require("connect-flash");
+const User = require("./model/newuser");
+const localStrategy = require("passport-local").Strategy;
 
 dotenv.config({
     path: "./config.env"
@@ -32,6 +35,15 @@ app.use(expressSession({
     saveUninitialized: false,
     resave: false
 }));
+
+/// PASSPORT POUR GARDER ET SUPPRIMER LES DONNÉES DE L'UTILISATEUR ///
+app.use(passport.initialize());
+app.use(passport.session());
+
+passport.use(User.createStrategy());
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
+
 app.use(connectFlash());
 app.use((req, res, next) => {
     res.locals.flashMessages = req.flash();

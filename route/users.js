@@ -1,24 +1,24 @@
 const express = require("express");
 const router = express.Router();
 
-const Product = require("../model/product");
-const User = require("../model/newuser");
-const homeController = require("./homeController")
+const productControl= require("./productController");
+const homeController = require("./homeController");
 
-router.get("/product/new", homeController.getIndex);
-router.post("/product/new", homeController.saveProduct);
 
-router.get("/product/search", homeController.getSearch);
-router.get("/product/search/find", homeController.findOneProduct);
+router.get("/product/new", productControl.getIndex);
+router.post("/product/new", productControl.saveProduct);
 
-router.get("/", homeController.allProducts);
-router.get("/", homeController.getIndexSlash);
-router.get("/index", homeController.redirectIndex);
+router.get("/product/search", productControl.getSearch);
+router.get("/product/search/find", productControl.findOneProduct);
 
-router.get("/edit/:id", homeController.editProduct);
-router.put("/edit/:id", homeController.update);
+router.get("/", productControl.allProducts);
+router.get("/", productControl.getIndexSlash);
+router.get("/index", productControl.redirectIndex);
 
-router.delete("/delete/:id", homeController.delete);
+router.get("/edit/:id", productControl.editProduct);
+router.put("/edit/:id", productControl.update);
+
+router.delete("/delete/:id", productControl.delete);
 
 ////////////////////////////////////////////////////////
 
@@ -26,6 +26,7 @@ router.get("/newuser/signup", homeController.getSignup);
 router.post("/newuser/signup", homeController.addSignup);
 
 router.get("/newuser/login", homeController.getLogin);
+router.get("/newuser/login", homeController.postLogin);
 
 ////////////////////////////////////////////////////////
 
