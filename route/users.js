@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const Product = require("../model/product");
+const User = require("../model/newuser");
 const homeController = require("./homeController")
 
 router.get("/product/new", homeController.getIndex);
@@ -18,5 +19,14 @@ router.get("/edit/:id", homeController.editProduct);
 router.put("/edit/:id", homeController.update);
 
 router.delete("/delete/:id", homeController.delete);
+
+////////////////////////////////////////////////////////
+
+router.get("/newuser/signup", homeController.getSignup);
+router.post("/newuser/signup", homeController.addSignup);
+
+router.get("/newuser/login", homeController.getLogin);
+
+////////////////////////////////////////////////////////
 
 module.exports = router;
