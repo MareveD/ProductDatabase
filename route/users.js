@@ -14,6 +14,8 @@ router.get("/", homeController.allProducts);
 router.get("/", homeController.getIndexSlash);
 router.get("/index", homeController.redirectIndex);
 
+router.get("/signup", homeController.getSignup);
+
 router.get("/edit/:id", homeController.editProduct);
 router.put("/edit/:id", homeController.update);
 

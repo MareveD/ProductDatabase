@@ -7,6 +7,10 @@ exports.getIndex = (req, res) => {
     res.render("new");
 }
 
+exports.getSignup = (req, res) => {
+    res.render("signup");
+}
+
 exports.getSearch = (req, res) => {
     res.render("search", {
         product: undefined
