@@ -1,26 +1,23 @@
+/*-------------------*/
 const Product = require("../model/product");
-const User = require("../model/newuser");
-//const {search} = require("./users");
+const User = require("../model/user");
+/*-------------------*/
 
-exports.getIndex = (req, res) => {
-    res.render("new");
-}
 
-exports.getSearch = (req, res) => {
-    res.render("search", {
-        product: undefined
-    });
-}
 
-exports.getIndexSlash = (req, res) => {
-    res.render("/");
-}
+/*-------------------*/
+exports.getIndex = (req, res) => {res.render("new");}
+exports.getSearch = (req, res) => {res.render("search", {product: undefined});}
+exports.getIndexSlash = (req, res) => {res.render("/");}
+exports.redirectIndex = (req, res) => {res.redirect("/");}
+exports.getSignup = (req, res) => {res.render("signup");}
+exports.getLogin = (req, res) => {res.render("login");}
+exports.getUnAuthenticated = (req, res) => {res.render("home");}
+/*-------------------*/
 
-exports.redirectIndex = (req, res) => {
-    res.redirect("/");
-}
 
-//////////////////////////// PRODUCTS ////////////////////////////
+
+/*-------------------*/
 exports.allProducts = (req, res) => {
     Product.find({}).then(product => {
         res.render("index", {
@@ -30,7 +27,11 @@ exports.allProducts = (req, res) => {
         console.log(error);
     });
 }
+/*-------------------*/
 
+
+
+/*-------------------*/
 exports.saveProduct = (req, res) => {
     console.log(req.body);
     code = req.body.code;
@@ -51,7 +52,11 @@ exports.saveProduct = (req, res) => {
             console.log(error)
         });
 }
+/*-------------------*/
 
+
+
+/*-------------------*/
 exports.findOneProduct = (req, res) => {
     const code = req.query.search;
     Product.find({
@@ -74,7 +79,11 @@ exports.findOneProduct = (req, res) => {
             }
         );
 }
+/*-------------------*/
 
+
+
+/*-------------------*/
 exports.editProduct = (req, res) => {
     const searchById = {
         _id: req.params.id
@@ -86,7 +95,11 @@ exports.editProduct = (req, res) => {
             })
         }).catch();
 }
+/*-------------------*/
 
+
+
+/*-------------------*/
 exports.update = (req, rep) => {
     const searchQuery = {
         _id: req.params.id
@@ -106,7 +119,11 @@ exports.update = (req, rep) => {
             rep.redirect("/");
         });
 }
+/*-------------------*/
 
+
+
+/*-------------------*/
 exports.delete = (req, rep) => {
     const searchQuery = {
         _id: req.params.id
@@ -119,34 +136,4 @@ exports.delete = (req, rep) => {
         rep.redirect("/");
     });
 }
-
-//////////////////////////// USERS ////////////////////////////
-
-exports.getSignup = (req, res) => {
-    res.render("signup");
-}
-
-exports.getLogin = (req, res) => {
-    res.render("login");
-}
-
-exports.addSignup = (req, res) => {
-    name = req.body.name;
-    email = req.body.email;
-    password = req.body.password;
-    const newUser = new User({
-        name: name,
-        email: email,
-        password: password
-    });
-    newUser.save()
-        .then(response => {
-            req.flash("success_msg", " Account sucessfully created !");
-            res.redirect("/")
-        })
-        .catch(error => {
-            req.flash("error_msg", "Failed to create your account !");
-            res.redirect("/signup")
-            console.log(error)
-        });
-}
+/*-------------------*/

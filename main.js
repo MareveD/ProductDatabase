@@ -1,53 +1,57 @@
-const express = require("express");
+const express = require('express');
 const app = express();
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
-const methodOverride = require("method-override");
-const path = require("path");
-const userRoutes = require("./route/users");
-const expressSession = require("express-session");
-const cookieParser = require("cookie-parser");
-const connectFlash = require("connect-flash");
 
-dotenv.config({
-    path: "./config.env"
-});
+const dotenv = require('dotenv');
+dotenv.config({path: './config.env'});
+const mongoose = require('mongoose');
+const methodOverride = require('method-override');
 
-mongoose.connect(process.env.DATABASE_LOCAL, {
-    useNewUrlParser: true
-});
+const port = process.env.PORT || 4000;
+const dbPath = process.env.DB_PATH;
+const dbOptions = { useNewUrlParser: true };
 
-app.use(express.urlencoded({
-    extended: true
-}));
+const passport = require ('passport'); 
+const cookieParser = require('cookie-parser');  
+const expressSession = require('express-session'); 
+const connectFlash = require('connect-flash');
+const LocalStrategy = require('passport-local').Strategy; 
 
-app.use(express.json());
-app.use(methodOverride("_method"));
-app.use(cookieParser("my_secret_code"));
-app.use(expressSession({
+const mainRouter = require('./route/user');
+app.set('view engine', 'ejs');
+app.set('views', 'views');
+
+app.use(cookieParser('my_secret_code')); 
+app.use(expressSession({ 
     secret: "my_secret_code",
     cookie: {
-        maxAge: 40000
+        maxAge: 4000000
     },
-    saveUninitialized: false,
+    saveUninitialized: false, 
     resave: false
 }));
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(connectFlash());
 app.use((req, res, next) => {
     res.locals.flashMessages = req.flash();
     next();
 });
-app.use(express.static(path.join(__dirname, "public")));
-app.use(userRoutes);
 
-app.set("views", path.join(__dirname, "views"));
-app.set("view engine", "ejs");
+app.use(express.static('./public'));
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+app.use(methodOverride('_method'));
 
-app.get("/", (req, res) => {
-    res.sendFile(path.resolve(__dirname, "views/index.ejs"))
-});
+const User = require('./model/user');
+passport.use(User.createStrategy()); 
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
-const port = process.env.PORT;
-app.listen(port, () => {
-    console.log("Server is on, on port " + port)
-});
+app.use(mainRouter);
+
+mongoose.connect(dbPath, dbOptions)
+    .then(() => console.log(`La base de données est connecté sur ${dbPath}`))  
+    .catch(err => console.log(err));
+app.listen(port, console.log(`Notre serveur tourne sur http://localhost:${port}`));
