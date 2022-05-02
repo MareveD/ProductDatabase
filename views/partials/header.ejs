@@ -17,16 +17,20 @@
   <script type="text/javascript" src="../libs/jquery-3.6.0.js"></script>
   <script type="text/javascript" src="../libs/jquery.dataTables.js"></script>
 
+  <!--JQuery directement ici, afin de fonctionner avec Bootstrap 5.1.3-->
   <script type="text/javascript" defer>
     $(document).ready(function () {
       $('#datatable').DataTable();
     });
   </script>
-
 </head>
 
 <body>
   <header>
+
+    <% if (user == undefined || user == "" || user == null || !user) { %>
+
+    <!--NAV BAR IF UNAUTHENTICATED-->
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid d-flex justify-content-between">
         <a class="navbar-brand" href="/">Product Database System</a>
@@ -36,13 +40,26 @@
         </button>
         <ul class="navbar-nav  mb-2 mb-lg-0">
           <li class="nav-item">
-          NAME GOES HERE IF LOGIN
+            <p class="text-white"> Welcome, Guest! Please<a href="/login">Login</a></p>
           </li>
+        </ul>
+      </div>
+    </nav>
+    
+    <% } else { %>
+
+    <!--NAV BAR IF AUTHENTICATED-->
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid d-flex justify-content-between">
+        <a class="navbar-brand" href="/">Product Database System</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <ul class="navbar-nav  mb-2 mb-lg-0">
           <li class="nav-item">
-            <a href="/login">Login</a>
-          </li>
-          <li class="nav-item">
-            <a href="/signup">Signup</a>
+            <p class="text-white"> Welcome back, <%= user.name %>
+            </p>
           </li>
           <li class="nav-item">
             <a href="/logout">Logout</a>
@@ -59,4 +76,7 @@
         </ul>
       </div>
     </nav>
+
+    <% } %>
+
   </header>
