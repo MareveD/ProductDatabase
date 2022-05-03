@@ -1,34 +1,44 @@
 const Product = require("../model/product");
-const {
-search
-} = require("./users");
+const User = require("../model/user");
 
 exports.getIndex = (req, res) => {
-    res.render("new");
+    res.render("new", {user: req.user});
 }
-
 exports.getSearch = (req, res) => {
     res.render("search", {
-        product: undefined
+        product: undefined,
+        user: req.user
     });
 }
-
-exports.getIndexSlash = (req, res) => {
-    res.render("/");
-}
-
 exports.redirectIndex = (req, res) => {
     res.redirect("/");
 }
+exports.getSignup = (req, res) => {
+    res.render("signup");
+}
+exports.getLogin = (req, res) => {
+    res.render("login");
+}
 
 exports.allProducts = (req, res) => {
-    Product.find({}).then(product => {
-        res.render("index", {
-            products: product
+    console.log("allProducts... Checking for authentication...");
+    if (req.isAuthenticated()) {
+        console.log("allProducts is authenticated!");
+        Product.find({}).then(product => {
+            res.render("index", {
+                products: product,
+                user: req.user
+            });
+        }).catch(error => {
+            console.log(error);
         });
-    }).catch(error => {
-        console.log(error);
-    });
+    } else {
+        console.log("allProducts is not authenticated!");
+        res.render("index", {
+            products: [],
+            user: req.user
+        });
+    }
 }
 
 exports.saveProduct = (req, res) => {
@@ -60,7 +70,8 @@ exports.findOneProduct = (req, res) => {
         .then((product) => {
             if (product.length !== 0) {
                 res.render("search", {
-                    product
+                    product,
+                    user: req.user
                 })
             } else {
                 req.flash("error_msg", "Can't find any product matching your query. Please try again !")
@@ -82,7 +93,8 @@ exports.editProduct = (req, res) => {
     Product.findById(searchById)
         .then(product => {
             res.render("edit", {
-                product: product
+                product: product,
+                user: req.user
             })
         }).catch();
 }

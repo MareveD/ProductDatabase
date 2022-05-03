@@ -17,20 +17,20 @@
   <script type="text/javascript" src="../libs/jquery-3.6.0.js"></script>
   <script type="text/javascript" src="../libs/jquery.dataTables.js"></script>
 
-
-  <!--Script pour faire fonctionner le JQUERY-->
-  <!--Le fichier ne fonctionnait pas dans js/product.js. Nous avons donc copier coller le code ici, dans le header.-->
+  <!--JQuery directement ici, afin de fonctionner avec Bootstrap 5.1.3-->
   <script type="text/javascript" defer>
     $(document).ready(function () {
       $('#datatable').DataTable();
     });
   </script>
-
-
 </head>
 
 <body>
   <header>
+
+    <% if (user == undefined || user == "" || user == null || !user) { %>
+
+    <!--NAV BAR IF UNAUTHENTICATED-->
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid d-flex justify-content-between">
         <a class="navbar-brand" href="/">Product Database System</a>
@@ -40,10 +40,29 @@
         </button>
         <ul class="navbar-nav  mb-2 mb-lg-0">
           <li class="nav-item">
-            <a href="#">Welcome, NAME</a>
+            <p class="text-white"> Welcome, Guest! Please<a href="/login">Login</a></p>
+          </li>
+        </ul>
+      </div>
+    </nav>
+    
+    <% } else { %>
+
+    <!--NAV BAR IF AUTHENTICATED-->
+    <nav class="navbar navbar-expand-lg">
+      <div class="container-fluid d-flex justify-content-between">
+        <a class="navbar-brand" href="/">Product Database System</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent"
+          aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+          <span class="navbar-toggler-icon"></span>
+        </button>
+        <ul class="navbar-nav  mb-2 mb-lg-0">
+          <li class="nav-item">
+            <p class="text-white"> Welcome back, <%= user.name %>
+            </p>
           </li>
           <li class="nav-item">
-            <a href="#">Logout</a>
+            <a href="/logout">Logout</a>
           </li>
           <li class="nav-item">
             <a href="/">Home</a>
@@ -57,4 +76,7 @@
         </ul>
       </div>
     </nav>
+
+    <% } %>
+
   </header>
