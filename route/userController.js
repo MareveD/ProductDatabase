@@ -1,5 +1,4 @@
 const User = require("../model/user");
-const passport = require("passport");
 
 module.exports = {
     saveUser: (req, res, next) => {
@@ -24,17 +23,20 @@ module.exports = {
             }
         });
     },
-
     redirectView: (req, res) => {
         const redirectPath = res.locals.redirect;
         if (redirectPath)
             res.redirect(redirectPath);
     },
     new: (req, res) => {
-        res.render("signup", {user: req.user});
+        res.render("signup", {
+            user: req.user
+        });
     },
     login: (req, res) => {
-        res.render("login", {user: req.user});
+        res.render("login", {
+            user: req.user
+        });
     },
     isUserAthenticated: (req, res, next) => {
         console.log("isUserAthenticated... Checking if user is authenticated... ");

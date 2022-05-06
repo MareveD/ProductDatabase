@@ -1,8 +1,9 @@
 const Product = require("../model/product");
-const User = require("../model/user");
 
 exports.getIndex = (req, res) => {
-    res.render("new", {user: req.user});
+    res.render("new", {
+        user: req.user
+    });
 }
 exports.getSearch = (req, res) => {
     res.render("search", {
@@ -19,7 +20,6 @@ exports.getSignup = (req, res) => {
 exports.getLogin = (req, res) => {
     res.render("login");
 }
-
 exports.allProducts = (req, res) => {
     console.log("allProducts... Checking for authentication...");
     if (req.isAuthenticated()) {
@@ -40,7 +40,6 @@ exports.allProducts = (req, res) => {
         });
     }
 }
-
 exports.saveProduct = (req, res) => {
     console.log(req.body);
     code = req.body.code;
@@ -61,7 +60,6 @@ exports.saveProduct = (req, res) => {
             console.log(error)
         });
 }
-
 exports.findOneProduct = (req, res) => {
     const code = req.query.search;
     Product.find({
@@ -85,7 +83,6 @@ exports.findOneProduct = (req, res) => {
             }
         );
 }
-
 exports.editProduct = (req, res) => {
     const searchById = {
         _id: req.params.id
@@ -98,7 +95,6 @@ exports.editProduct = (req, res) => {
             })
         }).catch();
 }
-
 exports.update = (req, rep) => {
     const searchQuery = {
         _id: req.params.id
@@ -118,7 +114,6 @@ exports.update = (req, rep) => {
             rep.redirect("/");
         });
 }
-
 exports.delete = (req, rep) => {
     const searchQuery = {
         _id: req.params.id
